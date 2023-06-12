@@ -1,0 +1,205 @@
+package com.mycompany.projetointegrador; // O pacote principal do projeto e contém todas as classes relacionadas a esse projeto específico.
+
+
+import java.util.HashMap; // Importa a classe HashMap, que é utilizada para criar uma estrutura de dados de mapeamento chave-valor.
+import java.util.Map; // Importa a interface Map, que define um mapeamento chave-valor genérico.
+import java.util.Scanner; // Importa a classe Scanner, que permite a leitura de dados de entrada.
+
+public class ProjetoIntegrador {
+
+    public static void main(String[] args) { // Define o método "main" que é o ponto de entrada do programa
+        Scanner ler = new Scanner(System.in); // Cria um objeto Scanner para leitura de dados de entrada do usuário.
+        boolean reiniciar = true; // Variável booleana que controla se o programa deve ser reiniciado ou não.
+        Map<Integer, Boolean> poltronas = new HashMap<>(); // Cria um HashMap para armazenar as poltronas e sua disponibilidade.
+        Map<Integer, Double> valorIngressos = new HashMap<>(); // Cria um HashMap para armazenar o valor dos ingressos comprados.
+        double valorTotal = 0.0; // Variável para armazenar o valor total gasto em ingressos.
+        boolean funcionario = false; // Variável booleana que indica se o usuário é um funcionário.
+        Map<Integer, String> filmesEmCartaz = new HashMap<>(); // Cria um HashMap para armazenar os filmes em cartaz.
+        int ultimaKey = 3; // Variável para controlar o número da última sala adicionada.
+
+        System.out.print("Bem-vindo ao Cinema ABC! Você está iniciando como cliente ou funcionário? (C/F): "); // Exibe uma mensagem para o usuário.
+        String modo = ler.nextLine(); // Lê a resposta do usuário.
+
+        // Verifica se o modo selecionado é de funcionário.
+        if (modo.equalsIgnoreCase("F")) {
+            System.out.print("Digite a senha de funcionário: "); // Exibe uma mensagem para o usuário.
+            String senha = ler.nextLine(); // Lê a senha digitada pelo funcionário.
+
+            // Verifica se a senha está correta.
+            if (!senha.equals("0000")) {
+                System.out.println("Senha incorreta. Iniciando como cliente."); // Exibe uma mensagem de senha incorreta.
+            } else {
+                funcionario = true; // Define a variável "funcionario" como true para indicar que o usuário é um funcionário.
+                System.out.println("Modo funcionário ativado."); // Exibe uma mensagem de modo funcionário ativado.
+            }
+        }
+
+        // Início do loop principal do programa.
+        while (reiniciar) {
+            String nome; // Variável para armazenar o nome do cliente.
+
+            System.out.print("Sistema de identificação. Digite seu nome: "); // Exibe uma mensagem para o usuário.
+            nome = ler.nextLine(); // Lê o nome digitado pelo usuário.
+            System.out.println("Olá " + nome + "! Bem-vindo ao Cinema ABC."); // Exibe uma mensagem de boas-vindas.
+
+            System.out.println("Esses são os filmes em cartaz:"); // Exibe uma mensagem para o usuário.
+            filmesEmCartaz.put(1, "(Sala 1) Pequena Sereia 01/06 18:00"); // Adiciona um filme em cartaz ao HashMap.
+            filmesEmCartaz.put(2, "(Sala 1) Pequena Sereia 01/06 20:00"); // Adiciona um filme em cartaz ao HashMap.
+            filmesEmCartaz.put(3, "(Sala 2) Homem Aranha 01/06 20:00"); // Adiciona um filme em cartaz ao HashMap.
+
+            // Itera sobre os filmes em cartaz e exibe cada um deles.
+            for (Map.Entry<Integer, String> entry : filmesEmCartaz.entrySet()) {
+                int numeroSala = entry.getKey();
+                String filme = entry.getValue();
+                System.out.println(numeroSala + " - " + filme);
+            }
+
+            // Verifica se o usuário é um funcionário.
+            if (funcionario) {
+                System.out.println("Opções de funcionário:"); // Exibe uma mensagem para o usuário.
+                System.out.println("A - Adicionar nova sala"); // Exibe uma opção para o funcionário.
+                System.out.println("B - Mudar filme em uma sala existente"); // Exibe uma opção para o funcionário.
+                System.out.println("C - Continuar como cliente"); // Exibe uma opção para o funcionário.
+                System.out.print("Escolha uma opção: "); // Exibe uma mensagem para o usuário.
+                String opcaoFuncionario = ler.nextLine(); // Lê a opção escolhida pelo funcionário.
+
+                // Verifica a opção escolhida pelo funcionário.
+                switch (opcaoFuncionario.toUpperCase()) {
+                    case "A":
+                        ultimaKey++; // Incrementa a última chave para adicionar uma nova sala.
+                        int numeroSala = ultimaKey;
+                        ler.nextLine(); // Limpa o buffer do scanner.
+                        System.out.print("Digite o nome do filme: "); // Exibe uma mensagem para o usuário.
+                        String nomeFilme = ler.nextLine(); // Lê o nome do filme digitado pelo funcionário.
+                        System.out.print("Digite a data e hora do filme (dd/mm hh:mm): "); // Exibe uma mensagem para o usuário.
+                        String dataHora = ler.nextLine(); // Lê a data e hora do filme digitados pelo funcionário.
+                        filmesEmCartaz.put(ultimaKey++, "(Sala " + numeroSala + ") " + nomeFilme + " " + dataHora); // Adiciona o novo filme em cartaz ao HashMap.
+                        System.out.println("Sala adicionada com sucesso!"); // Exibe uma mensagem de sucesso.
+                        break;
+                    case "B":
+                        numeroSala = ultimaKey;
+                        System.out.print("Digite o número da sala para mudar o filme: "); // Exibe uma mensagem para o usuário.
+                        int salaExistente = ler.nextInt(); // Lê o número da sala digitado pelo funcionário.
+                        ler.nextLine(); // Limpa o buffer do scanner.
+                       
+                         
+                        // Verifica se a sala existe no HashMap de filmes em cartaz.
+                        if (!filmesEmCartaz.containsKey(salaExistente)) {
+                            System.out.println("Sala não encontrada."); // Exibe uma mensagem de sala não encontrada.
+                            break;
+                        }
+
+                        System.out.print("Digite o novo nome do filme: "); // Exibe uma mensagem para o usuário.
+                        String novoFilme = ler.nextLine(); // Lê o novo nome do filme digitado pelo funcionário.
+                         System.out.print("Digite a data e hora do filme (dd/mm hh:mm): ");
+                         dataHora = ler.nextLine();
+                        filmesEmCartaz.put(salaExistente, "(Sala " + numeroSala + ") " +novoFilme+ " " + dataHora);// Atualiza o filme em cartaz da sala existente.
+                        System.out.println("Filme atualizado com sucesso!"); // Exibe uma mensagem de sucesso.
+                        break;
+                    case "C":
+                        funcionario = false; // Desativa o modo funcionário.
+                        break;
+                    default:
+                        System.out.println("Opção inválida. Continuando como cliente."); // Exibe uma mensagem de opção inválida.
+                        funcionario = false; // Desativa o modo funcionário.
+                        break;
+                }
+            }
+
+            // Exibe os filmes em cartaz atualizados.
+            System.out.println("Esses são os filmes em cartaz atualizados:");
+            for (Map.Entry<Integer, String> entry : filmesEmCartaz.entrySet()) {
+                int sala = entry.getKey();
+                String filme = entry.getValue();
+                System.out.println(sala + " - " + filme);
+                
+            }
+
+            System.out.print("Digite o número do filme que deseja assistir (Exemplo - 1): "); // Exibe uma mensagem para o usuário.
+            int opcao = ler.nextInt(); // Lê a opção do filme escolhida pelo usuário.
+            ler.nextLine(); // Limpa o buffer do scanner.
+
+            String filmeSelecionado = filmesEmCartaz.get(opcao); // Obtém o filme selecionado com base na opção escolhida.
+
+            // Verifica se a opção do filme é válida.
+            if (filmeSelecionado == null) {
+                System.out.println("Opção inválida."); // Exibe uma mensagem de opção inválida.
+                continue;
+            }
+
+            System.out.println("Filme escolhido: " + filmeSelecionado); // Exibe o filme escolhido pelo usuário.
+            
+            // Preenche o HashMap de poltronas com poltronas disponíveis.
+            for (int i = 1; i <= 10; i++) {
+                poltronas.putIfAbsent(i, true);
+            }
+
+            System.out.println("Selecione sua poltrona:");
+
+            // Exibe as poltronas disponíveis.
+            for (int i = 1; i <= 10; i++) {
+                boolean disponivel = poltronas.getOrDefault(i, true); // Obtém o status de disponibilidade da poltrona.
+                String status = disponivel ? "Disponível" : "Indisponível";
+                System.out.println("Poltrona " + i + ": " + status);
+            }
+
+            System.out.print("Digite o número da poltrona desejada (ou 0 para sair): "); // Exibe uma mensagem para o usuário.
+            int numeroPoltrona = ler.nextInt(); // Lê o número da poltrona desejada pelo usuário.
+
+            // Verifica se o usuário deseja sair.
+            if (numeroPoltrona == 0) {
+                System.out.println("Obrigado por utilizar a Bilheteria do Cinema ABC. Volte sempre!"); // Exibe uma mensagem de agradecimento.
+                System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); // Limpa a tela.
+                poltronas.clear(); // Limpa o HashMap de poltronas.
+                valorIngressos.clear(); // Limpa o HashMap de valores de ingressos.
+                continue; // Reinicia o loop.
+            }
+
+            boolean disponivel = poltronas.getOrDefault(numeroPoltrona, true); // Obtém o status de disponibilidade da poltrona escolhida.
+
+            if (disponivel) {
+                System.out.print("Ingresso inteiro ou meia? (I/M): "); // Exibe uma mensagem para o usuário.
+                String tipoIngresso = ler.next(); // Lê o tipo de ingresso escolhido pelo usuário.
+
+                double valorIngresso;
+                if (tipoIngresso.equalsIgnoreCase("I")) {
+                    valorIngresso = 20.0; // Valor do ingresso inteiro.
+                } else if (tipoIngresso.equalsIgnoreCase("M")) {
+                    valorIngresso = 10.0; // Valor do ingresso meia entrada.
+                } else {
+                    System.out.println("Opção inválida. Ingresso inteiro será considerado."); // Exibe uma mensagem de opção inválida.
+                    valorIngresso = 20.0; // Valor do ingresso inteiro.
+                }
+
+                poltronas.put(numeroPoltrona, false); // Define a poltrona escolhida como indisponível.
+                valorIngressos.put(numeroPoltrona, valorIngresso); // Armazena o valor do ingresso.
+
+                System.out.println("Ingresso comprado com sucesso!"); // Exibe uma mensagem de sucesso.
+                valorTotal += valorIngresso; // Atualiza o valor total gasto em ingressos.
+            } else {
+                System.out.println("Poltrona indisponível. Escolha outra poltrona."); // Exibe uma mensagem de poltrona indisponível.
+            }
+
+            System.out.print("Deseja comprar outro ingresso? (S/N): "); // Exibe uma mensagem para o usuário.
+            String continuar = ler.next(); // Lê a resposta do usuário.
+
+            // Verifica se o usuário deseja comprar outro ingresso.
+            if (continuar.equalsIgnoreCase("N")) {
+                 System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"); // Limpa a tela.
+                System.out.println("Valor total: R$ " + valorTotal); // Exibe o valor total gasto em ingressos.
+                   System.out.println("Comprovante de Compra:");
+
+        for (Map.Entry<Integer, Double> entry : valorIngressos.entrySet()) {
+             numeroPoltrona = entry.getKey();
+            double valorIngresso = entry.getValue();
+            System.out.println("Poltrona " + numeroPoltrona + ": R$ " + valorIngresso);
+            System.out.println("Obrigado por utilizar a Bilheteria do Cinema ABC. Volte sempre!"); // Exibe uma mensagem de agradecimento.
+               
+                poltronas.clear(); // Limpa o HashMap de poltronas.
+                valorIngressos.clear(); // Limpa o HashMap de valores de ingressos.
+                reiniciar = false; // Define a variável "reiniciar" como false para encerrar o programa.
+            }
+        }
+    }
+}
+}
